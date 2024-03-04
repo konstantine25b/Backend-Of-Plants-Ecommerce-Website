@@ -38,23 +38,24 @@ class Product(models.Model):
     vendor = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'Vendor'}  # Limit choices to users with role 'Vendor'
+        limit_choices_to={'role': 'Vendor'},required =True  # Limit choices to users with role 'Vendor'
     )
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,required =True)
+    title = models.CharField(max_length=255,required =True)
     description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2 ,required =True)
+    quantity = models.IntegerField(default=0,required =True)
     image_url = models.URLField() # ess dummy temaa
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True,required =True)
+    updated_at = models.DateTimeField(auto_now=True,required =True)
 
-    size = models.CharField(max_length=1, choices=SIZE_CHOICES, blank=True, null=True)
-    characteristics = models.CharField(max_length=50, choices=CHARACTERISTICS_CHOICES, blank=True, null=True)
-    location = models.CharField(max_length=50, choices=LOCATION_CHOICES, blank=True, null=True)
-    plant_family = models.CharField(max_length=50, choices=PLANT_FAMILY_CHOICES, blank=True, null=True)
-    water_care = models.CharField(max_length=20, choices=WATER_CARE_CHOICES, blank=True, null=True)
-    is_featured = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    size = models.CharField(max_length=1, choices=SIZE_CHOICES, blank=True, required =True)
+    characteristics = models.CharField(max_length=50, choices=CHARACTERISTICS_CHOICES, blank=True, required =True)
+    location = models.CharField(max_length=50, choices=LOCATION_CHOICES, blank=True, required =True)
+    plant_family = models.CharField(max_length=50, choices=PLANT_FAMILY_CHOICES, blank=True, required =True)
+    water_care = models.CharField(max_length=20, choices=WATER_CARE_CHOICES, blank=True,required =True)
+    is_featured = models.BooleanField(default=False,required =True)
+    is_active = models.BooleanField(default=True,required =True)
 
     def __str__(self):
         return self.name
