@@ -1,5 +1,6 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
-
-
-    
+from .models.CustomUser import CustomUser
+from .models.Category import Category
+from .models.Product import Product
+from .models.Order import Order
+from .models.OrderItem import OrderItem
+from .models.Review import Review
