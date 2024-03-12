@@ -1,11 +1,5 @@
 from rest_framework import generics, permissions
-from models.Category import Category
-from models.CustomUser import CustomUser
-from models.Category import Category
-from models.Product import Product
-from models.Order import Order
-from models.OrderItem import OrderItem
-from models.Review import Review
+from .models import *
 from .serializers import (
     CustomerSerializer, VendorSerializer, AdminSerializer,
     CategorySerializer, ProductSerializer, OrderSerializer,
