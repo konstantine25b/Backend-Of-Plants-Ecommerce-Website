@@ -25,3 +25,10 @@ class IsAdmin(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return request.user and request.user.role == 'Admin'
+
+class IsUnauthenticatedCustomer(permissions.BasePermission):
+    """
+    Allows access to unauthenticated customers.
+    """
+    def has_permission(self, request, view):
+        return request.user.is_anonymous and request.user.role == 'Customer'

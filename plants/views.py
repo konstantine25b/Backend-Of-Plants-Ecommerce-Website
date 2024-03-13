@@ -5,18 +5,18 @@ from .serializers import (
     CategorySerializer, ProductSerializer, OrderSerializer,
     OrderItemSerializer, ReviewSerializer
 )
-from .permissions import IsCustomer, IsVendor, IsAdmin
+from .permissions import IsCustomer, IsVendor, IsAdmin, IsUnauthenticatedCustomer
 
 # Customer views
 class CustomerListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.filter(role='Customer')
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAdminUser]
 
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(role='Customer')
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.IsAuthenticated, IsCustomer | IsAdmin]
+    permission_classes = [IsCustomer | permissions.IsAdminUser]
 
 # Vendor views
 class VendorListCreateView(generics.ListCreateAPIView):
@@ -41,27 +41,26 @@ class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
 # Category views
-class CategoryListCreateView(generics.ListCreateAPIView):
+class CategoryListCreateView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAuthenticated, IsAdmin]
 
-class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+class CategoryDetailView(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAuthenticated, IsAdmin]
 
 # Product views
-class ProductListCreateView(generics.ListCreateAPIView):
+class ProductListCreateView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated, IsVendor | IsAdmin]
+    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAuthenticated, IsVendor | IsAdmin]
 
-class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated, IsVendor | IsAdmin]
-
+    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAuthenticated, IsVendor | IsAdmin]
 # Order views
 class OrderListCreateView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
