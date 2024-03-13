@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from .models import CustomUser
 
 class IsCustomer(permissions.BasePermission):
     """
@@ -6,7 +7,7 @@ class IsCustomer(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user and request.user.role == 'Customer'
+        return request.user.is_authenticated and request.user.role == CustomUser.Customer
 
 
 class IsVendor(permissions.BasePermission):
@@ -15,7 +16,7 @@ class IsVendor(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user and request.user.role == 'Vendor'
+        return request.user.is_authenticated and request.user.role == CustomUser.Vendor
 
 
 class IsAdmin(permissions.BasePermission):
@@ -24,11 +25,11 @@ class IsAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user and request.user.role == 'Admin'
+        return request.user.is_authenticated and request.user.role == CustomUser.Admin
 
 class IsUnauthenticatedCustomer(permissions.BasePermission):
     """
     Allows access to unauthenticated customers.
     """
     def has_permission(self, request, view):
-        return request.user.is_anonymous and request.user.role == 'Customer'
+        return not request.user.is_authenticated

@@ -11,7 +11,7 @@ from .permissions import IsCustomer, IsVendor, IsAdmin, IsUnauthenticatedCustome
 class CustomerListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.filter(role='Customer')
     serializer_class = CustomerSerializer
-    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(role='Customer')
@@ -44,7 +44,7 @@ class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CategoryListCreateView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [ permissions.IsAuthenticated, IsAdmin]
 
 class CategoryDetailView(generics.RetrieveAPIView):
     queryset = Category.objects.all()

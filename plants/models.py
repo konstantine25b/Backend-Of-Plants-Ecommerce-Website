@@ -4,6 +4,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class CustomUser(AbstractUser):
+    Customer= 'Customer'
+    Vendor =  'Vendor'
+    Admin= 'Admin'
     ROLE_CHOICES = (
         ('Customer' , 'Customer'),
         ('Vendor' , 'Vendor'),
@@ -53,6 +56,9 @@ class CustomUser(AbstractUser):
         blank=True,
         related_name='custom_users'  # Custom related name
     )
+    
+    def get_role(self):
+        return self.role
     
     def __str__(self):
         return f"{self.role} | {self.email} "
