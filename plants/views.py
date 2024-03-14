@@ -7,29 +7,28 @@ from .serializers import (
 )
 from .permissions import (IsCustomer, IsVendor, IsAdmin,
     IsUnauthenticatedCustomer , IsAdminOrSelfOrReadOnly, IsVendorOrAdminOrReadOnly,
-    IsSelfAdminOrMainAdmin, IsMainAdminOrReadOnly)
+    IsSelfAdminOrMainAdmin, IsMainAdminOrReadOnly , CustomUserPermission)
 
 # Customer views
 class CustomerListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.AllowAny]  # Allow unauthenticated users to create users
-
+    permission_classes = [CustomUserPermission]
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsAdminOrSelfOrReadOnly]
+    permission_classes = [IsAdminOrSelfOrReadOnly , permissions.IsAuthenticated]
 
 # Vendor views
 class VendorListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.filter(role='Vendor')
     serializer_class = VendorSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [CustomUserPermission]
 
 class VendorDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(role='Vendor')
     serializer_class = VendorSerializer
-    permission_classes = [IsVendorOrAdminOrReadOnly]
+    permission_classes = [IsVendorOrAdminOrReadOnly , permissions.IsAuthenticated]
 
 # Admin views
 class AdminListCreateView(generics.ListCreateAPIView):

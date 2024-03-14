@@ -35,6 +35,20 @@ class IsUnauthenticatedCustomer(permissions.BasePermission):
         return not request.user.is_authenticated
 
 
+
+class CustomUserPermission(permissions.BasePermission):
+    """
+    Custom permission to allow unauthenticated users to create users,
+    but only authenticated users can use other methods.
+    """
+
+    def has_permission(self, request, view):
+        # Allow POST (creation) for unauthenticated users
+        if request.method == 'POST':
+            return True
+
+        # Allow other methods only for authenticated users
+        return request.user and request.user.is_authenticated
 class IsAdminOrSelfOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_authenticated:
