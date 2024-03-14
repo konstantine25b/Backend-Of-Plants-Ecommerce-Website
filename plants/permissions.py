@@ -33,3 +33,15 @@ class IsUnauthenticatedCustomer(permissions.BasePermission):
     """
     def has_permission(self, request, view):
         return not request.user.is_authenticated
+
+
+class IsAdminOrSelf(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated:
+            return True
+        return False
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_staff or request.user == obj:
+            return True
+        return False

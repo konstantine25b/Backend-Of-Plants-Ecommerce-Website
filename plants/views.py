@@ -5,18 +5,18 @@ from .serializers import (
     CategorySerializer, ProductSerializer, OrderSerializer,
     OrderItemSerializer, ReviewSerializer
 )
-from .permissions import IsCustomer, IsVendor, IsAdmin, IsUnauthenticatedCustomer
+from .permissions import IsCustomer, IsVendor, IsAdmin, IsUnauthenticatedCustomer , IsAdminOrSelf
 
 # Customer views
 class CustomerListCreateView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.filter(role='Customer')
+    queryset = CustomUser.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.AllowAny]  # Allow unauthenticated users to create users
 
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CustomUser.objects.filter(role='Customer')
+    queryset = CustomUser.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsCustomer | permissions.IsAdminUser]
+    permission_classes = [IsAdminOrSelf] 
 
 # Vendor views
 class VendorListCreateView(generics.ListCreateAPIView):
