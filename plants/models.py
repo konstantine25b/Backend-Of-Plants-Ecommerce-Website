@@ -141,12 +141,18 @@ class Order(models.Model):
         limit_choices_to={'role': 'Customer'})
     total_amount = models.DecimalField(max_digits=10, decimal_places=2,blank = False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{str(self.id)} | {self.user}"
    
    
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(blank = False) 
+    
+    def __str__(self):
+        return f"{str(self.id)} | {self.order} | {self.quantity}"
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -158,4 +164,7 @@ class Review(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{str(self.id)} | {self.user} | {self.product} | {self.rating}/5"
     
