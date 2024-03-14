@@ -17,9 +17,9 @@ class CustomUser(AbstractUser):
     username = models.CharField(
         max_length=150,
         unique=True,
-        blank=True,
-        null=True,
-        default=None
+        blank=False,
+        null=False,
+        default=''
     )
     first_name = models.CharField(
         max_length=150,
@@ -59,6 +59,12 @@ class CustomUser(AbstractUser):
     
     def get_role(self):
         return self.role
+    
+    def save(self, *args, **kwargs):
+        if not self.username:  # Set username to email if it's not provided
+            self.username = self.email
+        super().save(*args, **kwargs)
+
     
     def __str__(self):
         return f"{self.role} | {self.email} "
