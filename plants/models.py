@@ -143,7 +143,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{str(self.id)} | {self.user}"
+        return f" Order Id: {str(self.id)} | User: {self.user}"
    
    
 class OrderItem(models.Model):
@@ -152,7 +152,8 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(blank = False) 
     
     def __str__(self):
-        return f"{str(self.id)} | {self.order} | {self.quantity}"
+        
+        return f"Order Item Id: {str(self.id)} | Order Id :{self.order} | {self.quantity}"
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -166,5 +167,5 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{str(self.id)} | {self.user} | {self.product} | {self.rating}/5"
+        return f"Review Id:{str(self.id)} | user: {self.user} | Product: {self.product} | {self.rating}/5"
     
