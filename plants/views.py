@@ -9,6 +9,9 @@ from .permissions import (CustomCategoryPermission, CustomOrderItemPermission, C
      IsAdminOrSelfOrReadOnly, IsVendorOrAdminOrReadOnly,
     IsSelfAdminOrMainAdmin, IsMainAdminOrReadOnly , CustomUserPermission)
 
+from django.core.cache import cache
+from rest_framework.response import Response
+
 # Customer views
 class CustomerListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -56,12 +59,30 @@ class CategoryDetailView(generics.RetrieveAPIView):
 class ProductListCreateView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [CustomProductPermission]
+    # permission_classes = [CustomProductPermission]
+    
+    def list(self, request, *args, **kwargs):
+        # Define cache key and time
+        cache_key = "product_list2"
+        cache_time =  15  #15 secs
 
+        # Attempt to get data from cache
+        data = cache.get(cache_key)
+
+        if not data:
+            # If data not found in cache, fetch queryset from database
+            product = Product.objects.all()
+            data = ProductSerializer(product , many =True).data
+            cache.set(cache_key, data , cache_time)
+
+        return Response(data)
+  
 class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
+    
+    
 # Order views
 class OrderListCreateView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
