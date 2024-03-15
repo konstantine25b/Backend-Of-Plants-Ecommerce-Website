@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_yasg',
-    'drf_spectacular',
+    'drf_spectacular', # es ubralod meore swaggeris pontia
     'plants',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
