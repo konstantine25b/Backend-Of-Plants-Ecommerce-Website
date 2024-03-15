@@ -145,6 +145,35 @@ class CustomProductPermission(permissions.BasePermission):
         if request.user.is_authenticated:
             if request.user.role == 'Vendor':
                 return request.method in ['POST', 'PUT', 'PATCH']
-            elif request.user.role == 'Admin':
+            elif request.user.is_staff:
                 return True
+        return False
+    
+    
+class CustomOrderPermission(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of an order and admins to edit it.
+    """
+    def has_object_permission(self, request, view, obj):
+        # Allow access if the user is an admin
+        if request.user and request.user.is_staff:
+            return True
+        # Allow access if the user is the owner of the order
+        return obj.user == request.user
+    
+class CustomOrderItemPermission(permissions.BasePermission):
+    """
+    Custom permission to allow owners of an order item, vendors of products
+    in the order item, and admins to edit it.
+    """
+    def has_object_permission(self, request, view, obj):
+        # Allow access if the user is an admin
+        if request.user and request.user.is_staff:
+            return True
+        # Allow access if the user is the owner of the order item
+        if obj.order.user == request.user:
+            return True
+        # Allow access if the user is a vendor of a product in the order item
+        if request.user.role == 'Vendor' and obj.product.vendor == request.user:
+            return True
         return False
