@@ -134,3 +134,17 @@ class CustomCategoryPermission(permissions.BasePermission):
 
         # Allow modification methods (POST, PUT, PATCH, DELETE) only for authenticated admin users
         return request.user and request.user.is_authenticated and request.user.is_superuser
+    
+class CustomProductPermission(permissions.BasePermission):
+    """
+    Allows access to vendors for create and change actions,
+    and access to admins for all actions.
+    """
+    def has_permission(self, request, view):
+        # Allow access to vendors for create and change actions
+        if request.user.is_authenticated:
+            if request.user.role == 'Vendor':
+                return request.method in ['POST', 'PUT', 'PATCH']
+            elif request.user.role == 'Admin':
+                return True
+        return False
