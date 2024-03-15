@@ -139,6 +139,17 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# es redisistvis
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv('REDIS_LOCATION'),
+        'OPTIONS': {
+            'CLIENT_CLASS' : 'django_redis.client.DefaultClient'
+        }
+    }
+}
+
 CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
 
 REST_FRAMEWORK = {
