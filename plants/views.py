@@ -42,7 +42,7 @@ class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsSelfAdminOrMainAdmin]
 
 # Category views
-class CategoryListCreateView(generics.RetrieveUpdateDestroyAPIView):
+class CategoryListCreateView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [CustomCategoryPermission]
