@@ -5,7 +5,7 @@ from .serializers import (
     CategorySerializer, ProductSerializer, OrderSerializer,
     OrderItemSerializer, ReviewSerializer
 )
-from .permissions import (IsCustomer, IsVendor, IsAdmin,
+from .permissions import (CustomCategoryPermission, IsCustomer, IsVendor, IsAdmin,
     IsUnauthenticatedCustomer , IsAdminOrSelfOrReadOnly, IsVendorOrAdminOrReadOnly,
     IsSelfAdminOrMainAdmin, IsMainAdminOrReadOnly , CustomUserPermission)
 
@@ -42,15 +42,15 @@ class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsSelfAdminOrMainAdmin]
 
 # Category views
-class CategoryListCreateView(generics.ListAPIView):
+class CategoryListCreateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [ permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [CustomCategoryPermission]
 
 class CategoryDetailView(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsUnauthenticatedCustomer | permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [CustomCategoryPermission]
 
 # Product views
 class ProductListCreateView(generics.ListAPIView):

@@ -119,3 +119,18 @@ class IsMainAdminOrReadOnly(permissions.BasePermission):
 
         # For POST requests (creating new admin), only allow if user is the main admin.
         return request.user.is_superuser
+    
+    
+class CustomCategoryPermission(permissions.BasePermission):
+    """
+    Custom permission to allow unauthenticated users to view categories,
+    but only authenticated users with admin privileges can modify them.
+    """
+
+    def has_permission(self, request, view):
+        # Allow GET (list and retrieve) for everyone
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Allow modification methods (POST, PUT, PATCH, DELETE) only for authenticated admin users
+        return request.user and request.user.is_authenticated and request.user.is_superuser
