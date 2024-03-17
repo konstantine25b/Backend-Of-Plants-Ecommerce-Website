@@ -55,12 +55,12 @@ class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsSuperAdminOrStaffUpdateDelete]
 
 # Category views
-class CategoryListCreateView(generics.ListAPIView):
+class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [CustomCategoryPermission]
 
-class CategoryDetailView(generics.RetrieveAPIView):
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [CustomCategoryPermission]
@@ -68,7 +68,7 @@ class CategoryDetailView(generics.RetrieveAPIView):
 # Product views
 # # The `ProductListCreateView` class in Python defines a view for listing and creating products with
 # caching implemented for the product list.
-class ProductListCreateView(generics.ListCreateAPIView):
+class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend]
