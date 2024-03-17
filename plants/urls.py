@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     # Customer URLs
-    path('customers/', views.CustomerCreateView.as_view(), name='customer-create'),  # create customers
+    path('customers/', views.CustomerListCreateView.as_view(), name='customer-create'),  # create customers
     path('customers/<int:pk>/', views.CustomerDetailView.as_view(), name='customer-detail'), # Retrieve, update, delete customer
     
     # Vendor URLs

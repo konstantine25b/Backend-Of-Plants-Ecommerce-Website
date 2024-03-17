@@ -7,17 +7,15 @@ from .serializers import (
     CategorySerializer, ProductSerializer, OrderSerializer,
     OrderItemSerializer, ReviewSerializer
 )
-from .permissions import (CustomCategoryPermission, CustomOrderItemPermission, CustomOrderPermission, CustomProductPermission, CustomReviewPermission, 
-     IsAdminOrSelfOrReadOnly, IsVendorOrAdminOrReadOnly,
-    IsSelfAdminOrMainAdmin, IsMainAdminOrReadOnly , CustomUserPermission)
-
+from .permissions import (CustomAdminPermission, CustomCategoryPermission, CustomOrderItemPermission, CustomOrderPermission, CustomProductPermission, CustomReviewPermission, 
+      CustomUserPermission, IsSuperAdminOrStaffUpdateDelete)
 from django.core.cache import cache
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 # Customer views
 
-class CustomerCreateView(generics.CreateAPIView):
+class CustomerListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all().filter(role='Customer')
     serializer_class = CustomerSerializer
     permission_classes = [permissions.AllowAny]
@@ -25,18 +23,18 @@ class CustomerCreateView(generics.CreateAPIView):
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all().filter(role='Customer')
     serializer_class = CustomerSerializer
-    # permission_classes = [CustomUserPermission]
+    permission_classes = [CustomUserPermission]
 
 # Vendor views
 class VendorListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.filter(role='Vendor')
     serializer_class = VendorSerializer
-    permission_classes = [CustomUserPermission]
+    permission_classes = [permissions.AllowAny]
 
 class VendorDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(role='Vendor')
     serializer_class = VendorSerializer
-    permission_classes = [IsVendorOrAdminOrReadOnly , permissions.IsAuthenticated]
+    permission_classes = [CustomUserPermission]
 
 # Admin views
 class AdminListCreateView(generics.ListCreateAPIView):
@@ -49,12 +47,12 @@ class AdminListCreateView(generics.ListCreateAPIView):
             user.role = 'Admin'
             user.is_staff = True
             user.save()
-    # permission_classes = [permissions.IsAuthenticated, IsMainAdminOrReadOnly]
+    permission_classes = [CustomAdminPermission]
 
 class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(role='Admin')
     serializer_class = AdminSerializer
-    # permission_classes = [permissions.IsAuthenticated, IsSelfAdminOrMainAdmin]
+    permission_classes = [IsSuperAdminOrStaffUpdateDelete]
 
 # Category views
 class CategoryListCreateView(generics.ListAPIView):

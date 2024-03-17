@@ -1,40 +1,6 @@
 from rest_framework import permissions
 from .models import CustomUser
 
-class IsCustomer(permissions.BasePermission):
-    """
-    Allows access only to customers.
-    """
-
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role == CustomUser.Customer
-
-
-class IsVendor(permissions.BasePermission):
-    """
-    Allows access only to vendors.
-    """
-
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role == CustomUser.Vendor
-
-
-# class IsAdmin(permissions.BasePermission):
-#     """
-#     Allows access only to admins.
-#     """
-
-#     def has_permission(self, request, view):
-#         return request.user.is_authenticated and request.user.role == CustomUser.Admin
-
-class IsUnauthenticatedCustomer(permissions.BasePermission):
-    """
-    Allows access to unauthenticated customers.
-    """
-    def has_permission(self, request, view):
-        return not request.user.is_authenticated
-
-
 
 class CustomUserPermission(permissions.BasePermission):
     """
@@ -46,6 +12,30 @@ class CustomUserPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return obj == request.user or request.user.is_staff
+    
+class CustomAdminPermission(permissions.BasePermission):
+    """
+    Custom permission to only allow superusers to create new admin users.
+    """
+
+    def has_permission(self, request, view):
+
+        # Check if the user is a superuser
+        return request.user and request.user.is_superuser
+    
+class IsSuperAdminOrStaffUpdateDelete(permissions.BasePermission):
+    """
+    Custom permission to allow superadmin to perform any action,
+    and allow staff users to update or delete their own information.
+    """
+
+    def has_permission(self, request, view):
+        # Allow superadmin to perform any operation
+        return request.user.is_superuser
+
+    def has_object_permission(self, request, view, obj):
+        # Allow staff users to update or delete their own information
+        return request.user.is_staff and request.user == obj
     
     
 class IsAdminOrSelfOrReadOnly(permissions.BasePermission):
