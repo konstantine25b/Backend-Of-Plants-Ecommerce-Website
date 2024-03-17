@@ -7,8 +7,8 @@ from .serializers import (
     CategorySerializer, ProductSerializer, OrderSerializer,
     OrderItemSerializer, ReviewSerializer
 )
-from .permissions import (CustomAdminPermission, CustomCategoryPermission, CustomOrderItemPermission, CustomOrderPermission, CustomProductPermission, CustomReviewPermission, 
-      CustomUserPermission, IsSuperAdminOrStaffUpdateDelete)
+from .permissions import (CustomAdminPermission, CustomCategoryPermission, CustomOrderItemPermission, CustomOrderPermission, CustomProductPermission, 
+    CustomReviewPermission, CustomUserPermission, IsSuperAdminOrStaffUpdateDelete, IsVendorOrAdminOrReadOnly)
 from django.core.cache import cache
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -68,31 +68,34 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 # Product views
 # # The `ProductListCreateView` class in Python defines a view for listing and creating products with
 # caching implemented for the product list.
-class ProductListView(generics.ListAPIView):
+class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = ProductFilter
+    permission_classes = [IsVendorOrAdminOrReadOnly]
+    def perform_create(self, serializer):
+        serializer.save(vendor=self.request.user)
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_class = ProductFilter
     
-    def list(self, request, *args, **kwargs):
-        # Perform filtering
-        queryset = self.filter_queryset(self.get_queryset())
+    # def list(self, request, *args, **kwargs):
+    #     # Perform filtering
+    #     queryset = self.filter_queryset(self.get_queryset())
 
-        # Define cache key and time
-        cache_key = "product_list"
-        cache_time =  300  # 5 minutes
+    #     # Define cache key and time
+    #     cache_key = "product_list"
+    #     cache_time =  300  # 5 minutes
 
-        # Attempt to get data from cache
-        data = cache.get(cache_key)
+    #     # Attempt to get data from cache
+    #     data = cache.get(cache_key)
 
-        if not data:
-            # Serialize queryset
-            data = ProductSerializer(queryset, many=True).data
+    #     if not data:
+    #         # Serialize queryset
+    #         data = ProductSerializer(queryset, many=True).data
 
-            # Cache the data
-            cache.set(cache_key, data, cache_time)
+    #         # Cache the data
+    #         cache.set(cache_key, data, cache_time)
 
-        return Response(data)
+    #     return Response(data)
     
    
 class ProductDetailView(generics.RetrieveAPIView):

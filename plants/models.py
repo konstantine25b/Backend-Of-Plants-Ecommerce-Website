@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth import get_user_model
 
 
 class BaseUser(AbstractUser):
@@ -113,9 +114,9 @@ class Product(models.Model):
     )
 
     vendor = models.ForeignKey(
-        CustomUser,
+        get_user_model(),  # Use the custom user model
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'Vendor'},  # Limit choices to users with role 'Vendor'
+        # No limit_choices_to parameter, allowing both vendors and admins
     )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=False)
@@ -136,6 +137,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+   
 
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, 

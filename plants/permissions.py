@@ -63,6 +63,41 @@ class CustomCategoryPermission(permissions.BasePermission):
         # Allow modification methods (POST, PUT, PATCH, DELETE) only for authenticated admin users
         return request.user and request.user.is_authenticated and request.user.is_superuser
     
+    
+class IsVendorOrAdminOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow vendors and admins to create products,
+    but allow anyone to read them.
+    """
+
+    def has_permission(self, request, view):
+        # Allow read-only access to anyone
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            return False
+        
+        # Allow creation only for vendors and admins
+        return request.user.role == 'Vendor' or request.user.role == 'Admin'
+
+    def has_object_permission(self, request, view, obj):
+        # Allow read access to anyone
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        
+        # Check if the user is authenticated
+        if not request.user.is_authenticated:
+            return False
+        
+        # Allow admins to perform any action
+        if request.user.role == 'Admin':
+            return True
+        
+        # Ensure that the vendor is the owner of the product
+        return obj.vendor == request.user
+    
 class CustomProductPermission(permissions.BasePermission):
     """
     Allows access to vendors for create and change actions,
