@@ -40,12 +40,19 @@ class VendorDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 # Admin views
 class AdminListCreateView(generics.ListCreateAPIView):
-    queryset = AdminUser.objects.all()
+    queryset = CustomUser.objects.filter(role='Admin')
     serializer_class = AdminSerializer
+    
+    def perform_create(self, serializer):
+        user = serializer.save()
+        if self.request.user.is_superuser:
+            user.role = 'Admin'
+            user.is_staff = True
+            user.save()
     # permission_classes = [permissions.IsAuthenticated, IsMainAdminOrReadOnly]
 
 class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = AdminUser.objects.all()
+    queryset = CustomUser.objects.filter(role='Admin')
     serializer_class = AdminSerializer
     # permission_classes = [permissions.IsAuthenticated, IsSelfAdminOrMainAdmin]
 

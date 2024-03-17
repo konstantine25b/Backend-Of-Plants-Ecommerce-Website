@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import CustomUser, AdminUser
+from .models import CustomUser
 
 class IsCustomer(permissions.BasePermission):
     """

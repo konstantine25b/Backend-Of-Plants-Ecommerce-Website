@@ -63,12 +63,13 @@ class CustomUser(BaseUser):
 
     def __str__(self):
         return f"{self.role} | {self.email}"
+        
+    def save(self, *args, **kwargs):
+        if self.pk is None and self.is_superuser:  # If the user is a superuser and being created
+            self.role = 'Admin'  # Set role to 'Admin'
+            self.is_staff = True  # Make the user staff
+        super().save(*args, **kwargs)
 
-class AdminUser(BaseUser):
-    # Add specific fields or methods for AdminUser if needed
-    
-    def __str__(self):
-        return f"Admin | {self.email}"
 
 class Category(models.Model):
     title = models.CharField(max_length=100 , blank=False , unique=True,)
