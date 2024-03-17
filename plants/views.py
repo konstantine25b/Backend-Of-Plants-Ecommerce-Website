@@ -1,26 +1,31 @@
 from rest_framework import generics, permissions
+
+from plants.filters import ProductFilter
 from .models import *
 from .serializers import (
     CustomerSerializer, VendorSerializer, AdminSerializer,
     CategorySerializer, ProductSerializer, OrderSerializer,
     OrderItemSerializer, ReviewSerializer
 )
-from .permissions import (CustomCategoryPermission, CustomOrderItemPermission, CustomOrderPermission, CustomProductPermission, CustomReviewPermission, IsAdmin,
+from .permissions import (CustomCategoryPermission, CustomOrderItemPermission, CustomOrderPermission, CustomProductPermission, CustomReviewPermission, 
      IsAdminOrSelfOrReadOnly, IsVendorOrAdminOrReadOnly,
     IsSelfAdminOrMainAdmin, IsMainAdminOrReadOnly , CustomUserPermission)
 
 from django.core.cache import cache
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Customer views
-class CustomerListCreateView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.all()
+
+class CustomerCreateView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all().filter(role='Customer')
     serializer_class = CustomerSerializer
-    permission_classes = [CustomUserPermission]
+    permission_classes = [permissions.AllowAny]
+
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.all().filter(role='Customer')
     serializer_class = CustomerSerializer
-    permission_classes = [IsAdminOrSelfOrReadOnly , permissions.IsAuthenticated]
+    # permission_classes = [CustomUserPermission]
 
 # Vendor views
 class VendorListCreateView(generics.ListCreateAPIView):
@@ -35,14 +40,14 @@ class VendorDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 # Admin views
 class AdminListCreateView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.filter(role='Admin')
+    queryset = AdminUser.objects.all()
     serializer_class = AdminSerializer
-    permission_classes = [permissions.IsAuthenticated, IsMainAdminOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticated, IsMainAdminOrReadOnly]
 
 class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CustomUser.objects.filter(role='Admin')
+    queryset = AdminUser.objects.all()
     serializer_class = AdminSerializer
-    permission_classes = [permissions.IsAuthenticated, IsSelfAdminOrMainAdmin]
+    # permission_classes = [permissions.IsAuthenticated, IsSelfAdminOrMainAdmin]
 
 # Category views
 class CategoryListCreateView(generics.ListAPIView):
@@ -56,27 +61,35 @@ class CategoryDetailView(generics.RetrieveAPIView):
     permission_classes = [CustomCategoryPermission]
 
 # Product views
-class ProductListCreateView(generics.ListAPIView):
+# # The `ProductListCreateView` class in Python defines a view for listing and creating products with
+# caching implemented for the product list.
+class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # permission_classes = [CustomProductPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProductFilter
     
     def list(self, request, *args, **kwargs):
+        # Perform filtering
+        queryset = self.filter_queryset(self.get_queryset())
+
         # Define cache key and time
-        cache_key = "product_list2"
-        cache_time =  15  #15 secs
+        cache_key = "product_list"
+        cache_time =  300  # 5 minutes
 
         # Attempt to get data from cache
         data = cache.get(cache_key)
 
         if not data:
-            # If data not found in cache, fetch queryset from database
-            product = Product.objects.all()
-            data = ProductSerializer(product , many =True).data
-            cache.set(cache_key, data , cache_time)
+            # Serialize queryset
+            data = ProductSerializer(queryset, many=True).data
+
+            # Cache the data
+            cache.set(cache_key, data, cache_time)
 
         return Response(data)
-  
+    
+   
 class ProductDetailView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

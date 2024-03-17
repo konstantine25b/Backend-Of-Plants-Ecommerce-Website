@@ -3,17 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
-class CustomUser(AbstractUser):
-    Customer= 'Customer'
-    Vendor =  'Vendor'
-    Admin= 'Admin'
-    ROLE_CHOICES = (
-        ('Customer' , 'Customer'),
-        ('Vendor' , 'Vendor'),
-        ('Admin' , 'Admin'),
-    )
-    
-    role = models.CharField(max_length = 10 , choices = ROLE_CHOICES, default = 'Customer')
+class BaseUser(AbstractUser):
     username = models.CharField(
         max_length=150,
         unique=True,
@@ -26,7 +16,6 @@ class CustomUser(AbstractUser):
         blank=False,
         null=False
     )
-    
     last_name = models.CharField(
         max_length=150,
         blank=False,
@@ -35,26 +24,23 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(
         max_length=16
     )
-    
     email = models.EmailField(
         unique=True,
         blank=False,
         null=False
     )
     
-    
-    # Add related_name for groups and user_permissions
     groups = models.ManyToManyField(
         'auth.Group',
         verbose_name='groups',
         blank=True,
-        related_name='custom_users'  # Custom related name
+        related_name='%(class)s_groups'  # Dynamic related name based on the inheriting class
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         verbose_name='user permissions',
         blank=True,
-        related_name='custom_users'  # Custom related name
+        related_name='%(class)s_permissions'  # Dynamic related name based on the inheriting class
     )
     
     def get_role(self):
@@ -65,9 +51,24 @@ class CustomUser(AbstractUser):
             self.username = self.email
         super().save(*args, **kwargs)
 
+    class Meta:
+        abstract = True
+
+class CustomUser(BaseUser):
+    ROLE_CHOICES = (
+        ('Customer', 'Customer'),
+        ('Vendor', 'Vendor'),
+    )
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='Customer')
+
+    def __str__(self):
+        return f"{self.role} | {self.email}"
+
+class AdminUser(BaseUser):
+    # Add specific fields or methods for AdminUser if needed
     
     def __str__(self):
-        return f"{self.role} | {self.email} "
+        return f"Admin | {self.email}"
 
 class Category(models.Model):
     title = models.CharField(max_length=100 , blank=False , unique=True,)

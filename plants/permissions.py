@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import CustomUser
+from .models import CustomUser, AdminUser
 
 class IsCustomer(permissions.BasePermission):
     """
@@ -19,13 +19,13 @@ class IsVendor(permissions.BasePermission):
         return request.user.is_authenticated and request.user.role == CustomUser.Vendor
 
 
-class IsAdmin(permissions.BasePermission):
-    """
-    Allows access only to admins.
-    """
+# class IsAdmin(permissions.BasePermission):
+#     """
+#     Allows access only to admins.
+#     """
 
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role == CustomUser.Admin
+#     def has_permission(self, request, view):
+#         return request.user.is_authenticated and request.user.role == CustomUser.Admin
 
 class IsUnauthenticatedCustomer(permissions.BasePermission):
     """
@@ -38,17 +38,16 @@ class IsUnauthenticatedCustomer(permissions.BasePermission):
 
 class CustomUserPermission(permissions.BasePermission):
     """
-    Custom permission to allow unauthenticated users to create users,
-    but only authenticated users can use other methods.
+    Custom permission to allow owners of an object or admins to perform actions.
     """
 
-    def has_permission(self, request, view):
-        # Allow POST (creation) for unauthenticated users
-        if request.method == 'POST':
+    def has_object_permission(self, request, view, obj):
+        # Allow GET, PUT, PATCH, DELETE only if user is the owner or an admin
+        if request.method in permissions.SAFE_METHODS:
             return True
-
-        # Allow other methods only for authenticated users
-        return request.user and request.user.is_authenticated
+        return obj == request.user or request.user.is_staff
+    
+    
 class IsAdminOrSelfOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_authenticated:

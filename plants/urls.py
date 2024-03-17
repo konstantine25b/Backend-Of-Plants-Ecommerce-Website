@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns = [
     # Customer URLs
-    path('customers/', views.CustomerListCreateView.as_view(), name='customer-list-create'),  # List and create customers
-    path('customers/<int:pk>/', views.CustomerDetailView.as_view(), name='customer-detail'),  # Retrieve, update, delete customer
+    path('customers/', views.CustomerCreateView.as_view(), name='customer-create'),  # create customers
+    path('customers/<int:pk>/', views.CustomerDetailView.as_view(), name='customer-detail'), # Retrieve, update, delete customer
     
     # Vendor URLs
     path('vendors/', views.VendorListCreateView.as_view(), name='vendor-list-create'),  # List and create vendors
