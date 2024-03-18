@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 
-from plants.filters import ProductFilter
+from plants.filters import OrderFilter, ProductFilter
 from .models import *
 from .serializers import (
     CustomerSerializer, VendorSerializer, AdminSerializer,
@@ -113,9 +113,23 @@ class OrderListCreateView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
     permission_classes = [CustomOrderPermission]
     
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = OrderFilter
+    
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        if self.request.user.is_staff:
+            # Staff members can list all orders
+            return Order.objects.all()
+        elif self.request.user.is_authenticated:
+            # Regular users can only see their own orders
+            return Order.objects.filter(user=self.request.user)
+        else:
+            return Order.objects.none() 
+        
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
