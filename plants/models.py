@@ -145,6 +145,7 @@ class Order(models.Model):
         limit_choices_to={'role': 'Customer'})
     total_amount = models.DecimalField(max_digits=10, decimal_places=2,blank = False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f" Order Id: {str(self.id)} | User: {self.user}"
