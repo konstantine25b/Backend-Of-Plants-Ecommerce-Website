@@ -22,15 +22,23 @@ class ProductFilter(django_filters.FilterSet):
         }
         
         
+
 class OrderItemFilter(django_filters.FilterSet):
     class Meta:
-        model =OrderItem
-        fields = ['id' , 'order' , 'product' , 'quantity']
-        
-        
+        model = OrderItem
+        fields = {
+            'id': ['exact'],
+            'order': ['exact'],
+            'product': ['exact'],
+            'quantity': ['exact', 'gte', 'lte'],
+        }
 class ReviewFilter(django_filters.FilterSet):
     class Meta:
-        model =Review
-        fields = ['id' , 'user' , 'product' , 'rating' , 'created_at']
-        
-    
+        model = Review
+        fields = {
+            'id': ['exact'],
+            'user': ['exact'],
+            'product': ['exact'],
+            'rating': ['exact', 'gte', 'lte'],
+            'created_at': ['exact', 'gte', 'lte'],
+        }

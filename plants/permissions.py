@@ -97,21 +97,19 @@ class IsVendorOrAdminOrReadOnly(permissions.BasePermission):
         
         # Ensure that the vendor is the owner of the product
         return obj.vendor == request.user
-    
-class CustomProductPermission(permissions.BasePermission):
+
+class CanListOrders(permissions.BasePermission):
     """
-    Allows access to vendors for create and change actions,
-    and access to admins for all actions.
+    Custom permission to only allow admins and users with multiple orders to list orders.
     """
+
     def has_permission(self, request, view):
-        # Allow access to vendors for create and change actions
-        if request.user.is_authenticated:
-            if request.user.role == 'Vendor':
-                return request.method in ['POST', 'PUT', 'PATCH']
-            elif request.user.is_staff:
-                return True
-        return False
-    
+        # Allow admins to list orders
+        if request.user.is_staff:
+            return True
+        
+        # Allow users with multiple orders to list orders
+        return request.user.is_authenticated and request.user.orders.count() > 1
     
 class CustomOrderPermission(permissions.BasePermission):
     """
