@@ -21,7 +21,7 @@ DEBUG = os.getenv('DEBUG')
 ALLOWED_HOSTS = []
 
 
-AUTH_USER_MODEL = 'plants.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # Application definition
@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'drf_spectacular', # es ubralod meore swaggeris pontia
-    'plants',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
+    'plants',
+    'users',
+    'products',
+    'orders',
+    'reviews',
     
 ]
 

@@ -1,59 +1,59 @@
-import django_filters
-from .models import OrderItem, Product, Review ,Order
+# import django_filters
+# from .models import OrderItem, Product, Review ,Order
 
 
-class ProductFilter(django_filters.FilterSet):
-    class Meta:
-        model = Product
-        fields = {
-            'vendor__username': ['exact'],  # Filter by vendor username
-            'category': ['exact'],    # Filter by category name
-            'title': ['icontains'],         # Filter by title (case-insensitive)
-            'description': ['icontains'],   # Filter by description (case-insensitive)
-            'price': ['exact', 'gte', 'lte'],  # Filter by price (exact, greater than or equal to, less than or equal to)
-            'quantity': ['exact', 'gte', 'lte'],  # Filter by quantity (exact, greater than or equal to, less than or equal to)
-            'size': ['exact'],              # Filter by size
-            'characteristics': ['exact'],   # Filter by characteristics
-            'location': ['exact'],          # Filter by location
-            'plant_family': ['exact'],      # Filter by plant family
-            'water_care': ['exact'],        # Filter by water care
-            'is_featured': ['exact'],       # Filter by is_featured
-            'is_active': ['exact'],         # Filter by is_active
-        }
+# class ProductFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = Product
+#         fields = {
+#             'vendor__username': ['exact'],  # Filter by vendor username
+#             'category': ['exact'],    # Filter by category name
+#             'title': ['icontains'],         # Filter by title (case-insensitive)
+#             'description': ['icontains'],   # Filter by description (case-insensitive)
+#             'price': ['exact', 'gte', 'lte'],  # Filter by price (exact, greater than or equal to, less than or equal to)
+#             'quantity': ['exact', 'gte', 'lte'],  # Filter by quantity (exact, greater than or equal to, less than or equal to)
+#             'size': ['exact'],              # Filter by size
+#             'characteristics': ['exact'],   # Filter by characteristics
+#             'location': ['exact'],          # Filter by location
+#             'plant_family': ['exact'],      # Filter by plant family
+#             'water_care': ['exact'],        # Filter by water care
+#             'is_featured': ['exact'],       # Filter by is_featured
+#             'is_active': ['exact'],         # Filter by is_active
+#         }
         
     
-class OrderFilter(django_filters.FilterSet):
-    class Meta:
-        model = Order
-        fields = {
-            'id': ['exact'],
-            'user': ['exact'],
-            'total_amount': ['exact', 'gte', 'lte'],
-            'created_at': ['exact', 'gte', 'lte'],
-        }
+# class OrderFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = Order
+#         fields = {
+#             'id': ['exact'],
+#             'user': ['exact'],
+#             'total_amount': ['exact', 'gte', 'lte'],
+#             'created_at': ['exact', 'gte', 'lte'],
+#         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        user = self.request.user
-        if user.is_anonymous:
-            del self.filters['user']    
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         user = self.request.user
+#         if user.is_anonymous:
+#             del self.filters['user']    
 
-class OrderItemFilter(django_filters.FilterSet):
-    class Meta:
-        model = OrderItem
-        fields = {
-            'id': ['exact'],
-            'order': ['exact'],
-            'product': ['exact'],
-            'quantity': ['exact', 'gte', 'lte'],
-        }
-class ReviewFilter(django_filters.FilterSet):
-    class Meta:
-        model = Review
-        fields = {
-            'id': ['exact'],
-            'user': ['exact'],
-            'product': ['exact'],
-            'rating': ['exact', 'gte', 'lte'],
-            'created_at': ['exact', 'gte', 'lte'],
-        }
+# class OrderItemFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = OrderItem
+#         fields = {
+#             'id': ['exact'],
+#             'order': ['exact'],
+#             'product': ['exact'],
+#             'quantity': ['exact', 'gte', 'lte'],
+#         }
+# class ReviewFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = Review
+#         fields = {
+#             'id': ['exact'],
+#             'user': ['exact'],
+#             'product': ['exact'],
+#             'rating': ['exact', 'gte', 'lte'],
+#             'created_at': ['exact', 'gte', 'lte'],
+#         }
