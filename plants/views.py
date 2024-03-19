@@ -7,7 +7,7 @@ from .serializers import (
     CategorySerializer, ProductSerializer, OrderSerializer,
     OrderItemSerializer, ReviewSerializer
 )
-from .permissions import ( CustomAdminPermission, CustomCategoryPermission, CustomOrderItemPermission, CustomOrderPermission,
+from .permissions import ( CustomAdminPermission, CustomCategoryPermission,  CustomOrderItemPermission1, CustomOrderItemPermission2, CustomOrderPermission,
     CustomReviewPermission, CustomUserPermission, IsSuperAdminOrStaffUpdateDelete, IsVendorOrAdminOrReadOnly)
 from django.core.cache import cache
 from rest_framework.response import Response
@@ -143,12 +143,16 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
 class OrderItemListCreateView(generics.ListCreateAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [CustomOrderItemPermission1]
+    
+    def perform_create(self, serializer):
+        # Automatically set the user of the order item as the current user
+        serializer.save(user=self.request.user)
 
 class OrderItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [CustomOrderItemPermission]
+    permission_classes = [CustomOrderItemPermission2]
 
 # Review views
 
