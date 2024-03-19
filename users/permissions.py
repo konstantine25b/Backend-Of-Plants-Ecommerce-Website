@@ -5,6 +5,14 @@ class CustomUserPermission(permissions.BasePermission):
     """
     Custom permission to allow owners of an object or admins to perform actions.
     """
+    def has_permission(self, request, view):
+        # Allow GET requests (listing users) for staff members
+        # Allow POST requests (creating users) for all users
+        if request.method == 'GET':
+            return request.user and request.user.is_staff
+        elif request.method == 'POST':
+            return True
+        return False
 
     def has_object_permission(self, request, view, obj):
         # Allow GET, PUT, PATCH, DELETE only if user is the owner or an admin

@@ -14,7 +14,7 @@ from .permissions import ( CustomAdminPermission,
 class CustomerListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all().filter(role='Customer')
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [CustomUserPermission]
 
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all().filter(role='Customer')

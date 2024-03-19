@@ -1,5 +1,7 @@
 from rest_framework import generics
+from rest_framework import serializers
 from products.filters import ProductFilter
+from users.models import CustomUser
 from .models import *
 from .serializers import (
    
@@ -38,7 +40,18 @@ class ProductListCreateView(generics.ListCreateAPIView):
     
     #es ro vinc qmnis is ikos vendorad
     def perform_create(self, serializer):
+      if self.request.user.role == 'Vendor':
+        # If the user is a vendor, assign the product to the vendor
         serializer.save(vendor=self.request.user)
+      elif self.request.user.is_staff:
+        # If the user is staff, check if a vendor ID is provided in the request data
+        vendor_id = self.request.data.get('vendor')
+        if vendor_id:
+             vendor = CustomUser.objects.get(id=vendor_id)
+             serializer.save(vendor=vendor)
+        else:
+            # If no vendor ID is provided, assign the product to the staff user
+            serializer.save(vendor=self.request.user)
     
     # es redisistvis
     def list(self, request, *args, **kwargs):

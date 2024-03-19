@@ -31,6 +31,7 @@ class IsVendorOrAdminOrReadOnly(permissions.BasePermission):
         if not request.user.is_authenticated:
             return False
         
+        
         # Allow creation only for vendors and admins
         return request.user.role == 'Vendor' or request.user.is_staff
 
