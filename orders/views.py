@@ -1,6 +1,7 @@
 from rest_framework import generics
 
-from orders.filters import OrderFilter
+from orders.filters import OrderFilter, OrderItemFilter
+from users.models import CustomUser
 from .models import *
 from .serializers import (
    
@@ -34,10 +35,20 @@ class OrderListCreateView(generics.ListCreateAPIView):
         
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+      if self.request.user.role == 'Customer':
+        # If the user is a vendor, assign the product to the vendor
+        serializer.save(customer=self.request.user)
+      elif self.request.user.is_staff:
+        # If the user is staff, check if a vendor ID is provided in the request data
+        customer_id = self.request.data.get('customer')
+        if customer_id:
+             customer = CustomUser.objects.get(id=customer_id)
+             serializer.save(customer=customer)
+        else:
+            # If no vendor ID is provided, assign the product to the staff user
+            serializer.save(customer=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+
 
 class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
@@ -49,6 +60,9 @@ class OrderItemListCreateView(generics.ListCreateAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
     permission_classes = [CustomOrderItemPermission1]
+    
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = OrderItemFilter
     
     def perform_create(self, serializer):
         # Automatically set the user of the order item as the current user

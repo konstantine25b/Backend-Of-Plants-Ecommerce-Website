@@ -1,5 +1,4 @@
 from rest_framework import generics
-from rest_framework import serializers
 from products.filters import ProductFilter
 from users.models import CustomUser
 from .models import *

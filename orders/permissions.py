@@ -14,7 +14,7 @@ class CustomOrderPermission(permissions.BasePermission):
         
         # Allow staff and order creators to view their orders
         if request.method == 'GET':
-            return request.user.is_authenticated and (request.user.is_staff or view.kwargs['user_id'] == str(request.user.id))
+            return request.user.is_authenticated 
         
         # Allow other methods for authenticated users
         return True

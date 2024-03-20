@@ -1,5 +1,5 @@
 import django_filters
-from .models import OrderItem ,Order
+from .models import OrderItem , Order
 
 
     
@@ -8,8 +8,8 @@ class OrderFilter(django_filters.FilterSet):
         model = Order
         fields = {
             'id': ['exact'],
-            'user': ['exact'],
-            'total_amount': ['exact', 'gte', 'lte'],
+            'customer': ['exact'],
+            # 'total_cost': ['exact', 'gte', 'lte'],
             'created_at': ['exact', 'gte', 'lte'],
         }
 
