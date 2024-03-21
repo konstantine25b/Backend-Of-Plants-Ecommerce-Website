@@ -6,7 +6,7 @@ from .serializers import (
 
 )
 from .permissions import ( CustomAdminPermission,
-    CustomUserPermission, IsSuperAdminOrStaffUpdateDelete)
+    CustomUserPermission, CustomUserPermission2, IsSuperAdminOrStaffUpdateDelete)
 
 
 # Customer views
@@ -19,18 +19,18 @@ class CustomerListCreateView(generics.ListCreateAPIView):
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all().filter(role='Customer')
     serializer_class = CustomerSerializer
-    permission_classes = [CustomUserPermission]
+    permission_classes = [CustomUserPermission2]
 
 # Vendor views
 class VendorListCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.filter(role='Vendor')
     serializer_class = VendorSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [CustomUserPermission]
 
 class VendorDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(role='Vendor')
     serializer_class = VendorSerializer
-    permission_classes = [CustomUserPermission]
+    permission_classes = [CustomUserPermission2]
 
 # Admin views
 class AdminListCreateView(generics.ListCreateAPIView):
@@ -49,3 +49,9 @@ class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(role='Admin')
     serializer_class = AdminSerializer
     permission_classes = [IsSuperAdminOrStaffUpdateDelete]
+    
+    def perform_update(self, serializer):
+        user = serializer.save()
+        if self.request.user.is_superuser:
+            user.is_staff = True
+            user.save()

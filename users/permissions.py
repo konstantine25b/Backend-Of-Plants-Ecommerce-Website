@@ -8,6 +8,7 @@ class CustomUserPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         # Allow GET requests (listing users) for staff members
         # Allow POST requests (creating users) for all users
+       
         if request.method == 'GET':
             return request.user and request.user.is_staff
         elif request.method == 'POST':
@@ -18,6 +19,17 @@ class CustomUserPermission(permissions.BasePermission):
         # Allow GET, PUT, PATCH, DELETE only if user is the owner or an admin
         if request.method in permissions.SAFE_METHODS:
             return True
+       
+        return obj == request.user or request.user.is_staff
+    
+class CustomUserPermission2(permissions.BasePermission):
+    """
+    Custom permission to allow owners of an object or admins to perform actions.
+    """
+    
+
+    def has_object_permission(self, request, view, obj):
+        # Allow GET, PUT, PATCH, DELETE only if user is the owner or an admin
         return obj == request.user or request.user.is_staff
     
 class CustomAdminPermission(permissions.BasePermission):
@@ -36,13 +48,13 @@ class IsSuperAdminOrStaffUpdateDelete(permissions.BasePermission):
     and allow staff users to update or delete their own information.
     """
 
-    def has_permission(self, request, view):
-        # Allow superadmin to perform any operation
-        return request.user.is_superuser
+    # def has_permission(self, request, view):
+    #     # Allow superadmin to perform any operation
+    #     return request.user.is_superuser
 
     def has_object_permission(self, request, view, obj):
         # Allow staff users to update or delete their own information
-        return request.user.is_staff and request.user == obj
+        return request.user.is_staff and request.user == obj or request.user.is_superuser
     
     
     
