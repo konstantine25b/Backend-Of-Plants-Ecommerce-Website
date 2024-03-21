@@ -3,11 +3,14 @@ from rest_framework.test import APIClient
 from django.urls import reverse
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from users.models import CustomUser
+from django.contrib.auth.models import User
+
 
 
 User = get_user_model()
 
+
+# tests for customers
 class CustomerListTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -212,7 +215,7 @@ class CustomerUpdateTestCase(TestCase):
         self.assertEqual(self.customer.last_name, 'Updated Last Name')
         self.assertEqual(self.customer.phone_number, '1234567890')
         
-        
+# tests for vendors     
 class VendorListTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -404,6 +407,7 @@ class VendorUpdateTestCase(TestCase):
         self.assertEqual(self.vendor.last_name, 'Updated Last Name')
         self.assertEqual(self.vendor.phone_number, '1234567890')
 
+# tests for admins
 class AdminListTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -493,9 +497,8 @@ class AdminRetrieveTestCase(TestCase):
         self.assertEqual(response.data['id'], self.superuser.id)
         self.assertEqual(response.data['username'], self.superuser.username)
 
-
-
 class AdminUpdateTestCase(TestCase):
+    
     def setUp(self):
         self.client = APIClient()
         self.superuser = User.objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword')
@@ -581,3 +584,5 @@ class AdminUpdateTestCase(TestCase):
         self.assertNotEqual(other_staff_user.last_name, 'Updated Other Last Name')
         self.assertNotEqual(other_staff_user.phone_number, '9876543210')
         # Add more assertions for other fields as needed
+        
+        
