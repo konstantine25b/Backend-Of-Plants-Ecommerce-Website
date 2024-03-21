@@ -13,7 +13,7 @@ class CustomCategoryPermission(permissions.BasePermission):
             return True
 
         # Allow modification methods (POST, PUT, PATCH, DELETE) only for authenticated admin users
-        return request.user and request.user.is_authenticated and request.user.is_superuser
+        return request.user and request.user.is_authenticated and request.user.is_staff
     
     
 class IsVendorOrAdminOrReadOnly(permissions.BasePermission):

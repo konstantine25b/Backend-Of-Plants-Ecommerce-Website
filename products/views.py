@@ -54,28 +54,24 @@ class ProductListCreateView(generics.ListCreateAPIView):
     
     # es redisistvis
     def list(self, request, *args, **kwargs):
-        # Perform filtering
         queryset = self.filter_queryset(self.get_queryset())
-
+        
+        # Serialize filtered queryset
+        data = ProductSerializer(queryset, many=True).data
+        
         # Define cache key and time
         cache_key = "product_list"
-        cache_time =  300  # 5 minutes
-
-        # Attempt to get data from cache
-        data = cache.get(cache_key)
-
-        if not data:
-            # Serialize queryset
-            data = ProductSerializer(queryset, many=True).data
-
-            # Cache the data
-            cache.set(cache_key, data, cache_time)
-
+        cache_time = 300  # 5 minutes
+        
+        # Cache the data
+        cache.set(cache_key, data, cache_time)
+        
         return Response(data)
     
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsVendorOrAdminOrReadOnly]
+    
     
     

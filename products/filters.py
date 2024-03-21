@@ -6,9 +6,10 @@ class ProductFilter(django_filters.FilterSet):
     class Meta:
         model = Product
         fields = {
-            'vendor__username': ['exact'],  # Filter by vendor username
+            'id': ['exact'],
+            'vendor': ['exact'],  # Filter by vendor username
             'category': ['exact'],    # Filter by category name
-            'title': ['icontains'],         # Filter by title (case-insensitive)
+            'title': ['exact'],         # Filter by title (case-insensitive)
             'description': ['icontains'],   # Filter by description (case-insensitive)
             'price': ['exact', 'gte', 'lte'],  # Filter by price (exact, greater than or equal to, less than or equal to)
             'quantity': ['exact', 'gte', 'lte'],  # Filter by quantity (exact, greater than or equal to, less than or equal to)
