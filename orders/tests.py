@@ -1,9 +1,12 @@
 from django.test import TestCase
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 from orders.models import Order, OrderItem, Product
 from products.models import Category
 from decimal import Decimal
-
+from orders.views import CustomOrderPermission
+from rest_framework import status
+from rest_framework.test import APITestCase, APIClient
 class OrderModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -91,3 +94,51 @@ class OrderItemModelTestCase(TestCase):
         order_item_decimal_quantity = OrderItem.objects.create(order=self.order, product=self.product, quantity=1.5, customer=self.customer)
         expected_cost = order_item_decimal_quantity.quantity * self.product.price
         self.assertEqual(order_item_decimal_quantity.cost(), expected_cost)
+        
+class CustomOrderPermissionTest(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username='testuser', password='password123')
+        self.permission = CustomOrderPermission()
+        self.request = self.client.get('/')
+        self.view = None # In this case, we're not testing object permission, so the view isn't necessary
+
+    def test_has_permission_for_post(self):
+        # Test POST request
+        self.request.method = 'POST'
+        self.request.user = self.user
+        self.assertTrue(self.permission.has_permission(self.request, self.view))
+
+    def test_has_permission_for_get(self):
+        # Test GET request
+        self.request.method = 'GET'
+        self.request.user = self.user
+        self.assertTrue(self.permission.has_permission(self.request, self.view))
+
+    def test_has_permission_for_other_methods(self):
+        # Test other HTTP methods
+        self.request.method = 'PUT'
+        self.request.user = self.user
+        self.assertTrue(self.permission.has_permission(self.request, self.view))
+        
+class OrderTests(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.customer = get_user_model().objects.create_user(username='testuser', password='password123')
+        self.admin_user = get_user_model().objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword', is_staff=True, role='Admin')
+        self.category = Category.objects.create(title='Test Category')
+        self.vendor = get_user_model().objects.create_user(username='vendor', email='vendor@example.com', password='vendorpassword', role='Vendor')
+        self.product = Product.objects.create(title='Test Product', price=10, quantity=5, category=self.category, vendor=self.vendor)
+    
+    def test_create_order(self):
+        self.client.force_authenticate(user=self.customer)
+        data = {
+            'customer': self.customer.id,
+            'items': [
+                {
+                    'product': self.product.id,
+                    'quantity': 2
+                }
+            ]
+        }
+        response = self.client.post(reverse('order-list-create'), data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
