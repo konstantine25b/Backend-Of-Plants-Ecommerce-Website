@@ -4,6 +4,12 @@ from django.urls import reverse
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import RefreshToken
+import jwt
+from datetime import timedelta
+from django.utils import timezone
+
+
 
 
 
@@ -585,4 +591,22 @@ class AdminUpdateTestCase(TestCase):
         self.assertNotEqual(other_staff_user.phone_number, '9876543210')
         # Add more assertions for other fields as needed
         
+class JWTAuthTestCase(TestCase):
+    
+    def setUp(self):
+        self.client = APIClient()
+        self.superuser = User.objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword', role='Admin')
+        self.regular_user = User.objects.create_user(username='cust1', email='user1@example.com', password='userpassword')
+        self.regular_user = User.objects.create_user(username='vend1', email='user2@example.com', password='userpassword')
+      
+    def test_jwt_token(self):
+        # Attempt to obtain JWT token for regular user
+        response = self.client.post(reverse('token_obtain_pair'), {'username': 'cust1', 'password': 'userpassword'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         
+    
+    
+   
+    
+        
+    
