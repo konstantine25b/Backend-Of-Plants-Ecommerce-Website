@@ -1,5 +1,6 @@
 from rest_framework import permissions
-from .models import Product
+from .models import Order, OrderItem, Product
+
     
    
 class CustomOrderPermission(permissions.BasePermission):
@@ -26,79 +27,74 @@ class CustomOrderPermission(permissions.BasePermission):
         return obj.user == request.user
    
    
-class CustomOrderItemPermission1(permissions.BasePermission):
+class CustomOrderItemPermission(permissions.BasePermission):
     """
     Custom permission to only allow owners of an order item and admins
     to view the list of order items.
     """
 
     def has_permission(self, request, view):
-        # # Allow read-only access to anyone for safe methods
-        # if request.method in permissions.SAFE_METHODS:
-        #     return True
-        
-        # Check if the user is authenticated
-        if not request.user.is_authenticated:
-            return False
-        
-        # Allow admins to perform any action
-        if request.user.is_staff:
+        # Allow read-only access to anyone for safe methods
+         # in this method we let staff do anythin , users who have their 
+         # order and want to add order items to their order 
+       
+        if request.method == 'POST'  or request.method=='PUT':
+            if not request.user.is_authenticated:
+                return False
+            if request.user.is_staff:
+                return True
+           
+            
+            order_id = request.data.get('order') 
+            quantity = request.data.get('quantity') 
+            product_id = request.data.get('product') 
+            if not order_id:
+                return False
+            
+            
+            if not (order_id and product_id and quantity):
+                return False
+              
+            try:
+                order = Order.objects.get(id=order_id)
+                product = Product.objects.get(id=product_id)
+            except (Order.DoesNotExist, Product.DoesNotExist):
+                return False
+            
+            customer_id = request.user.id
+            
+            if order.customer_id != customer_id:
+                return False
+             
+            if product.quantity < quantity:
+                return False
+                
             return True
-        
-         # Allow vendors to perform any action if the product is theirs
-        if request.user.role == 'Vendor':
-            product_id = request.data.get('product')
-            if product_id:
-                product = Product.objects.filter(pk=product_id, vendor=request.user).exists()
-                if product:
-                    return True
-        
-        # Allow only the owner or admin to create order items
+                
+        if request.method == 'GET':
+             # Allow admins to perform any action
+            if request.user.is_staff:
+                return True
+            customer_id = request.user.id
+            queryset = OrderItem.objects.filter(customer_id=customer_id)
+            return queryset
+            
+            
         return False
-
-    def has_object_permission(self, request, view, obj):
-        # Allow admins to perform any action
-        if request.user.is_staff:
-            return True
-        
-        # Ensure that the user is the owner of the order item
-        return obj.order.user == request.user
-class CustomOrderItemPermission2(permissions.BasePermission):
     
-    """
-    Custom permission to only allow owners of an order item and staff
-    to perform any action on the order item.
-    """
-
-    def has_permission(self, request, view):
-        # # Allow read-only access to anyone for safe methods
-        # if request.method in permissions.SAFE_METHODS:
-        #     return True
-        
-        # Check if the user is authenticated
-        if not request.user.is_authenticated:
-            return False
-        
-        # Allow staff members to perform any action
-        if request.user.is_staff:
-            return True
-        
-        # Allow vendors to view orders associated with their products
-        if request.user.role == 'Vendor':
-            product_id = request.query_params.get('product')
-            if product_id:
-                product = Product.objects.filter(pk=product_id, vendor=request.user).exists()
-                if product:
-                    return True
-        
-        
-        # Allow only authenticated users to perform actions other than read
-        return False
-
     def has_object_permission(self, request, view, obj):
         # Allow staff members to perform any action
         if request.user.is_staff:
             return True
         
         # Ensure that the user is the owner of the order item
-        return obj.order.user == request.user
+       
+        if obj.customer == request.user: 
+           
+            return True
+            
+        
+        return False
+        
+
+
