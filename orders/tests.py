@@ -7,6 +7,8 @@ from decimal import Decimal
 from orders.views import CustomOrderPermission
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
+from .models import OrderItem
+from django.contrib.auth import get_user_model
 class OrderModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -158,4 +160,48 @@ class OrderTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Order.objects.filter(pk=order.pk).exists()) 
         
+        
+class OrderItemTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.staff_user = get_user_model().objects.create_superuser(email='staff@example.com', username='staff_user', password='staffpassword', role='staff', is_staff=True)
+        self.customer_user = get_user_model().objects.create_user(email='customer@example.com', username='customer_user', password='customerpassword', role='customer')
+        self.other_user = get_user_model().objects.create_user(email='other@example.com', username='other_user', password='otherpassword')
+        self.category = Category.objects.create(title='Test Category')
+        self.vendor = get_user_model().objects.create_user(username='vendor', email='vendor@example.com', password='vendorpassword', role='Vendor')
+        self.product = Product.objects.create(title='Test Product', price=10, quantity=5, category=self.category, vendor=self.vendor)
+    
+        # Create an order
+        self.order = Order.objects.create(customer=self.customer_user)
+        # Create an OrderItem instance with all required fields
+        self.order_item = OrderItem.objects.create(order=self.order, product=self.product, quantity=1, customer=self.customer_user)
+
+    def test_staff_can_create_order_item(self):
+        self.client.force_authenticate(user=self.staff_user)
+        response = self.client.post(
+            reverse('order-item-list-create'),
+            {'order': self.order_item.order.id, 'product': self.order_item.product.id, 'quantity': 1, 'customer': self.customer_user.id},
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_order_item_cost_calculation(self):
+        # Ensure that the cost calculation of the order item is correct
+        expected_cost = self.order_item.quantity * self.order_item.product.price
+        self.assertEqual(self.order_item.cost(), expected_cost)
+        
+    def test_customer_create_order_item(self):
+        self.client.force_authenticate(user=self.customer_user)
+        response = self.client.post(
+            reverse('order-item-list-create'),
+            {'order': self.order_item.order.id, 'product': self.order_item.product.id, 'quantity': 1, 'customer': self.customer_user.id},
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+    def test_order_item_detail(self):
+        self.client.force_authenticate(user=self.staff_user)
+        response = self.client.get(reverse('order-item-detail', kwargs={'pk': self.order_item.pk}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     
