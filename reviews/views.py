@@ -22,7 +22,7 @@ class ReviewListCreateView(generics.ListCreateAPIView):
         customer_id = self.request.data.get('user')
         if customer_id:
              customer = CustomUser.objects.get(id=customer_id)
-             serializer.save(customer=customer)
+             serializer.save(user=customer)
         else:
             # If no vendor ID is provided, assign the product to the staff user
             serializer.save(user=self.request.user)

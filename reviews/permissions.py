@@ -20,3 +20,4 @@ class CustomReviewPermission(permissions.BasePermission):
         # Allow owners of the review to edit or delete it
      
         return obj.user == request.user
+    
