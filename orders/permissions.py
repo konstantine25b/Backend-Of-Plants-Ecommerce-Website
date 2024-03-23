@@ -23,8 +23,14 @@ class CustomOrderPermission(permissions.BasePermission):
         # Allow access if the user is an admin
         if request.user.is_staff:
             return True
-        # Allow access if the user is the owner of the order
-        return obj.customer == request.user
+        
+        # Restrict permissions for other users
+        if request.method in ['DELETE', 'GET']:
+            # Allow DELETE and GET requests if the user is the owner of the order
+            return obj.customer == request.user
+        
+        # For other methods, deny access
+        return False
    
    
 class CustomOrderItemPermission(permissions.BasePermission):

@@ -148,6 +148,14 @@ class OrderTests(APITestCase):
         OrderItem.objects.create(order=order, product=self.product, quantity=2, customer=self.customer)
         self.client.force_authenticate(user=self.customer)
         response = self.client.get(reverse('order-detail', kwargs={'pk': order.pk}))
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+   
+    def test_delete_order(self):
+        order = Order.objects.create(customer=self.customer)
+        OrderItem.objects.create(order=order, product=self.product, quantity=2, customer=self.customer)
+        self.client.force_authenticate(user=self.customer)
+        response = self.client.delete(reverse('order-detail', kwargs={'pk': order.pk}))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Order.objects.filter(pk=order.pk).exists()) 
         
     
