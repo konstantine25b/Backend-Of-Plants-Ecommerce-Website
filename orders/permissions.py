@@ -24,7 +24,7 @@ class CustomOrderPermission(permissions.BasePermission):
         if request.user.is_staff:
             return True
         # Allow access if the user is the owner of the order
-        return obj.user == request.user
+        return obj.customer == request.user
    
    
 class CustomOrderItemPermission(permissions.BasePermission):

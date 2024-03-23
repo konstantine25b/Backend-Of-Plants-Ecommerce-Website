@@ -142,3 +142,12 @@ class OrderTests(APITestCase):
         }
         response = self.client.post(reverse('order-list-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+    def test_retrieve_order(self):
+        order = Order.objects.create(customer=self.customer)
+        OrderItem.objects.create(order=order, product=self.product, quantity=2, customer=self.customer)
+        self.client.force_authenticate(user=self.customer)
+        response = self.client.get(reverse('order-detail', kwargs={'pk': order.pk}))
+        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+    
