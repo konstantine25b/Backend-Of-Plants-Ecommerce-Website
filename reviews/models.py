@@ -14,6 +14,7 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    
     def __str__(self):
         return f"Review Id:{str(self.id)} | user: {self.user} | Product: {self.product} | {self.rating}/5"
     

@@ -18,4 +18,5 @@ class CustomReviewPermission(permissions.BasePermission):
         if request.user and request.user.is_staff:
             return True
         # Allow owners of the review to edit or delete it
+     
         return obj.user == request.user
