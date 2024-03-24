@@ -597,12 +597,29 @@ class JWTAuthTestCase(TestCase):
         self.client = APIClient()
         self.superuser = User.objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword', role='Admin')
         self.regular_user = User.objects.create_user(username='cust1', email='user1@example.com', password='userpassword')
-        self.regular_user = User.objects.create_user(username='vend1', email='user2@example.com', password='userpassword')
-      
-    def test_jwt_token(self):
+        self.vendor_user = User.objects.create_user(username='vend1', email='user2@example.com', password='userpassword')
+
+    def test_jwt_token_obtain(self):
         # Attempt to obtain JWT token for regular user
         response = self.client.post(reverse('token_obtain_pair'), {'username': 'cust1', 'password': 'userpassword'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
+
+    def test_jwt_token_refresh(self):
+        # Obtain JWT token for regular user
+        response = self.client.post(reverse('token_obtain_pair'), {'username': 'cust1', 'password': 'userpassword'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        token = response.data['refresh']
+
+        # Refresh the obtained token
+        response = self.client.post(reverse('token_refresh'), {'refresh': token})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
+
+   
+
+
         
     
     
