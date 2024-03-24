@@ -18,7 +18,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key_if_not_set')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
 
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -157,7 +158,6 @@ CACHES = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
