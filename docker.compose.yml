@@ -9,18 +9,18 @@ services:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
   web:
     build: .
     command: >
       sh -c "python3 manage.py migrate &&
              python3 manage.py collectstatic --noinput &&
              gunicorn plants_api.wsgi:application --bind 0.0.0.0:8000"
-
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-    enviornment:
+    environment:
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG}
       DB_NAME: ${DATABASE_NAME}
@@ -30,6 +30,16 @@ services:
       DB_PORT: ${DATABASE_PORT}
     depends_on:
       - db
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
