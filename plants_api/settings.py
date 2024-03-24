@@ -101,10 +101,6 @@ DATABASES = {
         'PORT': os.getenv('DATABASE_PORT'),
         
     },
-    'test': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',
-    }
 }
 
 
