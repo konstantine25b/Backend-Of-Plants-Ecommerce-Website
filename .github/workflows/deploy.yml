@@ -24,13 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run migrations
+      - name: Run tests
         run: |
-            python manage.py migrate
-  
-      - name: Run Django tests
-        run: |
-          python manage.py test
+            export SECRET_KEY="$SECRET_KEY"
+            python manage.py test
+        env:
+            SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
       - name: Build Docker image
         run: docker build -t plants_api .
