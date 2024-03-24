@@ -28,10 +28,12 @@ jobs:
         run: | 
             python manage.py test
         env:
-            SECRET_KEY: ${{ secrets.SECRET_KEY }}
-            DEBUG: ${{ secrets.DEBUG }}
-            DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-            DATABASE_USER: ${{ secrets.DATABASE_USER }}
-            DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+            SECRET_KEY: ${SECRET_KEY}
+            DEBUG: ${DEBUG}
+            DATABASE_NAME: ${DATABASE_NAME}
+            DATABASE_USER: ${DATABASE_USER}
+            DATABASE_PASSWORD: ${DATABASE_PASSWORD}
             DATABASE_HOST: localhost
-            DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+            DATABASE_PORT: ${DATABASE_PORT}
+            # - name: Build Docker image
+      #   run: docker build -t plants_api .
