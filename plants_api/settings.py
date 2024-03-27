@@ -20,7 +20,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['164.92.170.208', 'localhost', '127.0.0.1']
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1' , '178.128.194.208']
-# CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
+CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
 
 
 AUTH_USER_MODEL = 'users.CustomUser'
