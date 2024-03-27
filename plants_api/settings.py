@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key_if_not_set')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '64.225.110.101']
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1' , '178.128.194.208']
 CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
 
@@ -143,7 +143,7 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR/'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
