@@ -170,9 +170,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://164.92.170.208:6379",
+        "LOCATION": "redis://127.0.0.1:6379",  # Use localhost (127.0.0.1) and port 6379
         'OPTIONS': {
-            'CLIENT_CLASS' : 'django_redis.client.DefaultClient'
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
         }
     }
 }
