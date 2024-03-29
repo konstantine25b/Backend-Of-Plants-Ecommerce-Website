@@ -92,11 +92,24 @@ WSGI_APPLICATION = 'plants_api.wsgi.application'
 # }
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': "plants_storage",
+#         'USER': "kosa25",
+#         'PASSWORD': "Baxuta777",
+#         'HOST': "localhost",
+#         'PORT': 5432,
+        
+#     },
+# }
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': "plants_storage",
-        'USER': "kosa25",
+        'USER': "postgres",
         'PASSWORD': "Baxuta777",
         'HOST': "localhost",
         'PORT': 5432,
