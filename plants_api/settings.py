@@ -170,13 +170,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
-        'OPTIONS': {
-            'CLIENT_CLASS' : 'django_redis.client.DefaultClient'
+        "LOCATION": "redis://164.92.170.208:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "7v+hDQD6SoZq7ibHESI98NE9jTu2UdGtcs95QGpGsfAUhA4qd6FqkVt/e6vy3m+eieBl3dGeqkydXJtO"
         }
     }
 }
-
 
 
 REST_FRAMEWORK = {
