@@ -3,9 +3,7 @@ from products.filters import ProductFilter
 from users.models import CustomUser
 from .models import *
 from .serializers import (
-   
     CategorySerializer, ProductSerializer,
-
 )
 
 from .permissions import (  CustomCategoryPermission, 
