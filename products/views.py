@@ -58,9 +58,9 @@ class ProductListCreateView(generics.ListCreateAPIView):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)      
         data = ProductSerializer(page, many=True).data
-        # cache_key = "product_list"
-        # cache_time = 300
-        # cache.set(cache_key, data, cache_time)
+        cache_key = "product_list"
+        cache_time = 300
+        cache.set(cache_key, data, cache_time)
         return self.get_paginated_response(data)
     
     
