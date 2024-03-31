@@ -1,5 +1,5 @@
 from rest_framework import generics
-from products.filters import ProductFilter
+from products.filters import ProductFilter, SubCategoryFilter
 from users.models import CustomUser
 from .models import *
 from .serializers import (
@@ -33,6 +33,8 @@ class SubCategoryListCreateView(generics.ListCreateAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
     permission_classes = [CustomCategoryPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = SubCategoryFilter
 
 class SubCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = SubCategory.objects.all()
