@@ -3,7 +3,7 @@ from products.filters import ProductFilter
 from users.models import CustomUser
 from .models import *
 from .serializers import (
-    CategorySerializer, ProductSerializer,
+    CategorySerializer, ProductSerializer, SubCategorySerializer,
 )
 
 from .permissions import (  CustomCategoryPermission, 
@@ -28,6 +28,16 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 # Product views
 # # The `ProductListCreateView` class in Python defines a view for listing and creating products with
 # caching implemented for the product list.
+
+class SubCategoryListCreateView(generics.ListCreateAPIView):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
+    permission_classes = [CustomCategoryPermission]
+
+class SubCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
+    permission_classes = [CustomCategoryPermission]
 
 
 class ProductListCreateView(generics.ListCreateAPIView):

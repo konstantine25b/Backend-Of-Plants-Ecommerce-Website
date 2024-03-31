@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from users.models import CustomUser
 from faker import Faker
 import random
-from products.models import Category ,Product
+from products.models import SubCategory ,Product
 from orders.models import Order ,OrderItem
 from reviews.models import Review
 
@@ -34,34 +34,23 @@ class Command(BaseCommand):
             
             
         
-        for _ in range(5):
-            category = Category(
-                title=fake.word().capitalize(),
-                description=fake.text(),
-            )
-            
-            category.save()
-        
+      
         vendors = CustomUser.objects.filter(role='Vendor') 
-        categories = Category.objects.all()
+        subcategories = SubCategory.objects.all()
         
         for _ in range(200):
             vendor = random.choice(vendors)
-            category = random.choice(categories)
+            subcategory = random.choice(subcategories)
 
             product = Product(
                 vendor=vendor,
-                category=category,
+                subcategory=subcategory,
                 title=fake.word().capitalize(),
                 description=fake.text(),
                 price=random.uniform(5.0, 100.0),  # Generate random price between 5.0 and 100.0
                 quantity=random.randint(0, 100),  # Generate random quantity between 0 and 100
                 image_url=fake.image_url(),  # Generate fake image URL
-                size=random.choice(['S', 'M', 'L']),  # Random size
-                characteristics=random.choice(['Easy', 'Air purifying', 'Pet friendly', 'Hanging plant']),
-                location=random.choice(['Sun', 'Partial sun', '(Half) shade']),
-                plant_family=random.choice(['Ferns', 'Succulents', 'Palms', 'Cacti']),
-                water_care=random.choice(['Weekly', 'Bi-weekly', 'Monthly']),
+                size=random.choice(['S', 'M', 'L', 'XS' ,'XL', 'XXL']),  # Random size
                 is_featured=fake.boolean(),  # Random boolean value
                 is_active=True  # Set to active by default
             )
