@@ -1,6 +1,15 @@
 import django_filters
 
-from products.models import Product
+from products.models import Product, SubCategory
+
+class SubCategoryFilter(django_filters.FilterSet):
+    class Meta:
+        model = SubCategory
+        fields= {
+            'id': ['exact'],
+            'category': ['exact'], 
+        }
+
 
 class ProductFilter(django_filters.FilterSet):
     class Meta:
