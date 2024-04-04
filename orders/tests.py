@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from orders.models import Order, OrderItem, Product
-from products.models import Category
+from products.models import Category, SubCategory
 from decimal import Decimal
 from orders.views import CustomOrderPermission
 from rest_framework import status
@@ -16,6 +16,7 @@ class OrderModelTestCase(TestCase):
         cls.customer = get_user_model().objects.create_user(username='testuser', password='password123')
         
         cls.category = Category.objects.create(title='Test Category')
+        cls.subcategory =  SubCategory.objects.create(title="SubCategory 1", category=cls.category)  
         cls.vendor = get_user_model().objects.create_user(username='vendor', email='vendor@example.com', password='vendorpassword', role='Vendor')
     
         # Create a product with the specified vendor
@@ -23,7 +24,7 @@ class OrderModelTestCase(TestCase):
             title='Test Product',
             price=10,
             quantity=5,
-            category=cls.category,
+            subcategory=cls.subcategory,
             vendor=cls.vendor  # Assign the vendor to the product
         )
         cls.order = Order.objects.create(customer=cls.customer)
@@ -50,6 +51,7 @@ class OrderItemModelTestCase(TestCase):
         cls.customer = get_user_model().objects.create_user(username='testuser', password='password')    
     
         cls.category = Category.objects.create(title='Test Category')
+        cls.subcategory =  SubCategory.objects.create(title="SubCategory 1", category=cls.category)  
         cls.vendor = get_user_model().objects.create_user(username='vendor', email='vendor@example.com', password='vendorpassword', role='Vendor')
     
         # Create a product with the specified vendor
@@ -57,7 +59,7 @@ class OrderItemModelTestCase(TestCase):
             title='Test Product',
             price=10,
             quantity=5,
-            category=cls.category,
+            subcategory=cls.subcategory,
             vendor=cls.vendor  # Assign the vendor to the product
         )
         cls.order = Order.objects.create(customer=cls.customer)
@@ -128,8 +130,9 @@ class OrderTests(APITestCase):
         self.customer = get_user_model().objects.create_user(username='testuser', password='password123')
         self.admin_user = get_user_model().objects.create_superuser(username='admin', email='admin@example.com', password='adminpassword', is_staff=True, role='Admin')
         self.category = Category.objects.create(title='Test Category')
+        self.subcategory = SubCategory.objects.create(title="SubCategory 1", category=self.category)  
         self.vendor = get_user_model().objects.create_user(username='vendor', email='vendor@example.com', password='vendorpassword', role='Vendor')
-        self.product = Product.objects.create(title='Test Product', price=10, quantity=5, category=self.category, vendor=self.vendor)
+        self.product = Product.objects.create(title='Test Product', price=10, quantity=5, subcategory=self.subcategory, vendor=self.vendor)
     
     def test_create_order(self):
         self.client.force_authenticate(user=self.customer)
@@ -168,8 +171,9 @@ class OrderItemTests(TestCase):
         self.customer_user = get_user_model().objects.create_user(email='customer@example.com', username='customer_user', password='customerpassword', role='customer')
         self.other_user = get_user_model().objects.create_user(email='other@example.com', username='other_user', password='otherpassword')
         self.category = Category.objects.create(title='Test Category')
+        self.subcategory = SubCategory.objects.create(title="SubCategory 1", category=self.category)  
         self.vendor = get_user_model().objects.create_user(username='vendor', email='vendor@example.com', password='vendorpassword', role='Vendor')
-        self.product = Product.objects.create(title='Test Product', price=10, quantity=5, category=self.category, vendor=self.vendor)
+        self.product = Product.objects.create(title='Test Product', price=10, quantity=5, subcategory=self.subcategory, vendor=self.vendor)
     
         # Create an order
         self.order = Order.objects.create(customer=self.customer_user)

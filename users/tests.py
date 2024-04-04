@@ -126,6 +126,7 @@ class CustomerRetrieveTestCase(TestCase):
         
         self.client.force_authenticate(user=self.superuser)
         response = self.client.get(reverse('customer-detail', kwargs={'pk': self.customer.pk}))
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Assert that the retrieved data matches the customer's details
         self.assertEqual(response.data['id'], self.customer.id)

@@ -12,7 +12,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         fake = Faker()
 
-        for _ in range(55):
+        for _ in range(1):
             is_staff = random.choice([True] + [False] * 9)  # True once in 10 times
             if is_staff:
                 role = 'Admin'
@@ -38,7 +38,7 @@ class Command(BaseCommand):
         vendors = CustomUser.objects.filter(role='Vendor') 
         subcategories = SubCategory.objects.all()
         
-        for _ in range(1200):
+        for _ in range(1):
             vendor = random.choice(vendors)
             subcategory = random.choice(subcategories)
 
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         customers = CustomUser.objects.filter(role='Customer') 
         products = Product.objects.all()
         
-        for _ in range(315):  # Generate 5 orders
+        for _ in range(5):  # Generate 5 orders
                 customer = random.choice(customers)
     
                 order = Order.objects.create(
@@ -83,7 +83,7 @@ class Command(BaseCommand):
             
                 order.save()
                 
-        for _ in range(1630):  # Generate between 0 and 5 reviews
+        for _ in range(30):  # Generate between 0 and 5 reviews
                 customer = random.choice(customers)
                 rating = random.randint(1, 5)
                 comment = fake.text()
