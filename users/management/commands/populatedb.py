@@ -87,6 +87,7 @@ class Command(BaseCommand):
                 customer = random.choice(customers)
                 rating = random.randint(1, 5)
                 comment = fake.text()
+                product=random.choice(products)
 
                 Review.objects.create(
                     product=product,
