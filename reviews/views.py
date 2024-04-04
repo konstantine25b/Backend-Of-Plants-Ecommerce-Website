@@ -1,4 +1,6 @@
 from rest_framework import generics
+
+from reviews.filters import ReviewFilter
 from .models import *
 from .serializers import (
  ReviewSerializer
@@ -6,6 +8,7 @@ from .serializers import (
 from .permissions import (  
     CustomReviewPermission)
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Review views
 
@@ -13,6 +16,8 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [CustomReviewPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ReviewFilter
     
     def perform_create(self, serializer):
 
@@ -34,6 +39,7 @@ class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [CustomReviewPermission]
+    
     
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

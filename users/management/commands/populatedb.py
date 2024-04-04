@@ -49,7 +49,7 @@ class Command(BaseCommand):
                 description=fake.text(),
                 price=random.uniform(5.0, 100.0),  # Generate random price between 5.0 and 100.0
                 quantity=random.randint(0, 100),  # Generate random quantity between 0 and 100
-                image_url=fake.image_url(),  # Generate fake image URL
+                image_url="https://qgfloral.imgix.net/images/itemVariation/ZZPlantAsShown-23040554723.jpg?auto=format&w=600&h=720&fit=crop&dpr=2",  
                 size=random.choice(['S', 'M', 'L', 'XS' ,'XL', 'XXL']),  # Random size
                 is_featured=fake.boolean(),  # Random boolean value
                 is_active=True  # Set to active by default
@@ -59,7 +59,7 @@ class Command(BaseCommand):
         customers = CustomUser.objects.filter(role='Customer') 
         products = Product.objects.all()
         
-        for _ in range(165):  # Generate 5 orders
+        for _ in range(215):  # Generate 5 orders
                 customer = random.choice(customers)
     
                 order = Order.objects.create(
@@ -83,7 +83,7 @@ class Command(BaseCommand):
             
                 order.save()
                 
-        for _ in range(430):  # Generate between 0 and 5 reviews
+        for _ in range(1430):  # Generate between 0 and 5 reviews
                 customer = random.choice(customers)
                 rating = random.randint(1, 5)
                 comment = fake.text()
