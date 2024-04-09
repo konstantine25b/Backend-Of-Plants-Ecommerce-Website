@@ -1,4 +1,5 @@
 # Plants API
+Django | Django-Rest-Framework | Simple JWT | Docker | Nginx | Gunicorn
 
 Plants API is a Django Rest Framework (DRF) project designed to serve as an e-commerce marketplace for vendors and customers. It provides functionalities for customers to browse categories, subcategories, and products, sign up, log in, and place orders. Vendors can post their products and manage customer orders, while administrators have full control over the system.
 
