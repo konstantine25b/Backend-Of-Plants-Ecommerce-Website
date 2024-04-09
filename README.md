@@ -31,6 +31,54 @@ docker-compose up
 
 ## API Endpoints
 
+### User Management
+
+- **Create User:** `POST /api/user/`
+- **Retrieve, Update, Delete User:** `GET/PUT/DELETE /api/user/<id>/`
+
+### Product Management
+
+- **Create Product:** `POST /api/product/`
+- **Retrieve, Update, Delete Product:** `GET/PUT/DELETE /api/product/<id>/`
+
+### Order Management
+
+- **List and Create Orders:** `GET/POST /orders/`
+- **Retrieve, Update, Delete Order:** `GET/PUT/DELETE /orders/<id>/`
+- **List and Create Order Items:** `GET/POST /order-items/`
+- **Retrieve, Update, Delete Order Item:** `GET/PUT/DELETE /order-items/<id>/`
+
+### Review Management
+
+- **List and Create Reviews:** `GET/POST /reviews/`
+- **Retrieve, Update, Delete Review:** `GET/PUT/DELETE /reviews/<id>/`
+
+### Admin Management
+
+#### Customer Management
+
+- **Create Customer:** `POST /api/customer/`
+- **Retrieve, Update, Delete Customer:** `GET/PUT/DELETE /api/customer/<id>/`
+
+#### Vendor Management
+
+- **List and Create Vendors:** `GET/POST /api/vendor/`
+- **Retrieve, Update, Delete Vendor:** `GET/PUT/DELETE /api/vendor/<id>/`
+
+#### Admin Management
+
+- **List and Create Admins:** `GET/POST /api/admin/`
+- **Retrieve, Update, Delete Admin:** `GET/PUT/DELETE /api/admin/<id>/`
+
+### Other Endpoints
+
+- **API Schema:** `GET /api/schema/`
+- **Swagger UI:** `GET /api/schema/swagger-ui/`
+- **Token Obtain:** `POST /api/token/`
+- **Token Refresh:** `POST /api/token/refresh/`
+- **Token Verify:** `POST /api/token/verify/`
+
+
 ## Authentication
 
 - **Token Generation:** To obtain an access token, use the `/api/token/` endpoint with valid credentials.
