@@ -38,37 +38,37 @@ docker-compose up
 
 ### Product Management
 
-- **Create Product:** `POST /api/product/`
-- **Retrieve, Update, Delete Product:** `GET/PUT/DELETE /api/product/<id>/`
+- **List and Create Product:** `POST /api/product/products`
+- **Retrieve, Update, Delete Product:** `GET/PUT/DELETE api/product/products/<id>/`
 
 ### Order Management
 
-- **List and Create Orders:** `GET/POST /orders/`
-- **Retrieve, Update, Delete Order:** `GET/PUT/DELETE /orders/<id>/`
-- **List and Create Order Items:** `GET/POST /order-items/`
-- **Retrieve, Update, Delete Order Item:** `GET/PUT/DELETE /order-items/<id>/`
+- **List and Create Orders:** `GET/POST api/order/orders/`
+- **Retrieve, Update, Delete Order:** `GET/PUT/DELETE api/order/orders/<id>/`
+- **List and Create Order Items:** `GET/POST api/order/order-items/`
+- **Retrieve, Update, Delete Order Item:** `GET/PUT/DELETE api/order/order-items/<id>/`
 
 ### Review Management
 
-- **List and Create Reviews:** `GET/POST /reviews/`
-- **Retrieve, Update, Delete Review:** `GET/PUT/DELETE /reviews/<id>/`
+- **List and Create Reviews:** `GET/POST api/review/reviews/`
+- **Retrieve, Update, Delete Review:** `GET/PUT/DELETE api/review/reviews/<id>/`
 
 ### Admin Management
 
 #### Customer Management
 
-- **Create Customer:** `POST /api/customer/`
-- **Retrieve, Update, Delete Customer:** `GET/PUT/DELETE /api/customer/<id>/`
+- **Create Customer:** `POST api/user/customer/s`
+- **Retrieve, Update, Delete Customer:** `GET/PUT/DELETE api/user/customers/<id>/`
 
 #### Vendor Management
 
-- **List and Create Vendors:** `GET/POST /api/vendor/`
-- **Retrieve, Update, Delete Vendor:** `GET/PUT/DELETE /api/vendor/<id>/`
+- **List and Create Vendors:** `GET/POST api/user/vendors/`
+- **Retrieve, Update, Delete Vendor:** `GET/PUT/DELETE api/user/vendors/<id>/`
 
 #### Admin Management
 
-- **List and Create Admins:** `GET/POST /api/admin/`
-- **Retrieve, Update, Delete Admin:** `GET/PUT/DELETE /api/admin/<id>/`
+- **List and Create Admins:** `GET/POST api/user/admins/`
+- **Retrieve, Update, Delete Admin:** `GET/PUT/DELETE api/user/admins/<id>/`
 
 ### Other Endpoints
 
