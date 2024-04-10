@@ -26,7 +26,7 @@ Plants API is a Django Rest Framework (DRF) project designed to serve as an e-co
 1. Clone the repository:
 git clone https://github.com/konstantine25b/Backend-Of-Plants-Ecommerce-Website
 2. Navigate to the project directory:
-cd plants_api
+cd Backend-Of-Plants-Ecommerce-Website
 3. Build Docker containers:
 docker-compose build
 4. Start Docker containers:
