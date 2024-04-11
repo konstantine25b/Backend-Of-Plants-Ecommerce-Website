@@ -16,9 +16,9 @@ from datetime import timedelta
 SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key_if_not_set')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['164.92.170.208', 'localhost', '127.0.0.1','http://api.apikosaplants.online', 'apikosaplants.online','api.apikosaplants.online']
+ALLOWED_HOSTS = ['164.92.170.208', 'localhost', '127.0.0.1', 'apikosaplants.online','api.apikosaplants.online']
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1' , '178.128.194.208']
 CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
 
