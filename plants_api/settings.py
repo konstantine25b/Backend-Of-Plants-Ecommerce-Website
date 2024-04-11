@@ -16,7 +16,7 @@ from datetime import timedelta
 SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key_if_not_set')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['apikosaplants.online','www.apikosaplants.online','164.92.170.208','api.apikosaplants.online', 'localhost']
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1' , '178.128.194.208']
