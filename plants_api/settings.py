@@ -81,41 +81,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'plants_api.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': "plants_storage",
-        'USER': "kosa25",
-        'PASSWORD': "Baxuta777",
-        'HOST': "localhost",
-        'PORT': 5432,
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': "db",
+        'PORT': os.getenv('DATABASE_PORT'),
         
     },
 }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': "plants_storage",
-#         'USER': "postgres",
-#         'PASSWORD': "Baxuta777",
-#         'HOST': "localhost",
-#         'PORT': 5432,
-        
-#     },
-# }
 
 
 
