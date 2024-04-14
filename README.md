@@ -12,7 +12,7 @@ Plants API is a Django Rest Framework (DRF) project designed to serve as an e-co
 
 ## Tech Stack
 
-#### Django | Django-Rest-Framework | PostgreSQL | Simple JWT | Docker | Nginx | Gunicorn 
+#### Django | Django-Rest-Framework | PostgreSQL | Simple JWT | Docker | Nginx | Redis | Gunicorn 
 
 ## Features
 
