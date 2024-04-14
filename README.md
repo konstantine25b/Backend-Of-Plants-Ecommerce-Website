@@ -32,24 +32,25 @@ Plants API is a Django Rest Framework (DRF) project designed to serve as an e-co
 ### Steps
 
 1. Clone the repository:
-git clone https://github.com/konstantine25b/Backend-Of-Plants-Ecommerce-Website
+##### git clone https://github.com/konstantine25b/Backend-Of-Plants-Ecommerce-Website
 2. Navigate to the project directory:
-cd Backend-Of-Plants-Ecommerce-Website
+##### cd Backend-Of-Plants-Ecommerce-Website
 3. Add .env file at Backend-Of-Plants-Ecommerce-Website based on .env.example:
 
-SECRET_KEY=
-DEBUG=
-DATABASE_NAME= 
-DATABASE_USER=
-DATABASE_PASSWORD= 
-DATABASE_HOST= 
-DATABASE_PORT=
+##### SECRET_KEY=
+##### DEBUG=
+##### DATABASE_NAME= 
+##### DATABASE_USER=
+##### DATABASE_PASSWORD= 
+##### DATABASE_HOST= 
+##### DATABASE_PORT=
 
 4. Change Settings.py (located in plants_api folder)
-Change Debug=False to Debug=True
+##### Change Debug=False to Debug=True
 5. Build Docker containers:
-docker-compose up --build
-6. Access the API at `http://localhost:8000`.
+##### docker-compose up --build
+6. Access the API
+##### http://localhost:8000
 
 ## API Endpoints
 
@@ -123,15 +124,6 @@ docker-compose up --build
 
 - **Token Generation:** To obtain an access token, use the `/api/token/` endpoint with valid credentials.
 - **Authorization:** Include the access token in the Authorization header for accessing protected endpoints.
-
-
-## Deployment
-
-1. Set up a DigitalOcean droplet.
-2. Install Docker and Docker Compose.
-3. Clone the repository onto the droplet.
-4. Follow the installation steps mentioned above.
-5. Configure NGINX and Gunicorn for production deployment.
 
 ## Contributors
 
