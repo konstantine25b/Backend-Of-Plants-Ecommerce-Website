@@ -55,11 +55,6 @@ Plants API is a Django Rest Framework (DRF) project designed to serve as an e-co
 
 ## API Endpoints
 
-### User Management
-
-- **Create User:** `POST /api/user/`
-- **Retrieve, Update, Delete User:** `GET/PUT/DELETE /api/user/<id>/`
-
 ### Category Management
 - **List and Create Categories:** GET/POST /api/product/categories/
 -**Retrieve, Update, Delete Category:** GET/PUT/DELETE /api/product/categories/<id>/
