@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key_if_not_set')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['apikosaplants.online','www.apikosaplants.online','164.92.170.208','api.apikosaplants.online', 'localhost']
+ALLOWED_HOSTS = ['apikosaplants.online','www.apikosaplants.online','164.92.170.208', '164.92.206.89','api.apikosaplants.online', 'localhost']
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1' , '178.128.194.208']
 CORS_ALLOW_ALL_ORIGINS =True # es ro yvelgan gaeshvas jerjerobit
 
@@ -84,14 +84,25 @@ WSGI_APPLICATION = 'plants_api.wsgi.application'
 
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.getenv('DATABASE_NAME'),
+#         'USER': os.getenv('DATABASE_USER'),
+#         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+#         'HOST': "db",
+#         'PORT': os.getenv('DATABASE_PORT'),
+        
+#     },
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('DATABASE_USER'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': "db",
-        'PORT': os.getenv('DATABASE_PORT'),
+        'NAME': "plants_storage",
+        'USER': "kosa25",
+        'PASSWORD': "KosA2503a",
+        'HOST': "localhost",
+        'PORT': 5432,
         
     },
 }
